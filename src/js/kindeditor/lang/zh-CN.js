@@ -206,6 +206,7 @@ KindEditor.lang({
 		p : '正 文'
 	},
 	'fontname.fontName' : {
+		'华文细黑' : '华文细黑',
 		'SimSun' : '宋体',
 		'NSimSun' : '新宋体',
 		'FangSong_GB2312' : '仿宋_GB2312',

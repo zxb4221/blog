@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>KindEditor PHP</title>
+	<title>编辑文章</title>
 	<link rel="stylesheet" href="../js/kindeditor/themes/default/default.css" />
 	<link rel="stylesheet" href="../js/kindeditor/plugins/code/prettify.css" />
 	<script charset="UTF-8" src="../js/jquery.min.js"></script>
@@ -11,41 +11,41 @@
 	<script charset="utf-8" src="../js/kindeditor/lang/zh-CN.js"></script>
 	<script charset="utf-8" src="../js/kindeditor/plugins/code/prettify.js"></script>
 	
-<?php
-function getconfig($file, $ini, $type="string") 
-{ 
-if ($type=="int") 
-{ 
-$str = file_get_contents($file); 
-$config = preg_match("/" . $ini . "=(.*);/", $str, $res); 
-Return $res[1]; 
-} 
-else 
-{ 
-$str = file_get_contents($file); 
-$config = preg_match("/" . $ini . "=\"(.*)\";/", $str, $res); 
-if($res[1]==null) 
-{ 
-$config = preg_match("/" . $ini . "='(.*)';/", $str, $res); 
-} 
-Return $res[1]; 
-} 
-} 
+	<?php
+	function getconfig($file, $ini, $type="string") 
+	{ 
+		if ($type=="int") 
+		{ 
+			$str = file_get_contents($file); 
+			$config = preg_match("/" . $ini . "=(.*);/", $str, $res); 
+			Return $res[1]; 
+		} 
+		else 
+		{ 
+			$str = file_get_contents($file); 
+			$config = preg_match("/" . $ini . "=\"(.*)\";/", $str, $res); 
+			if($res[1]==null) 
+			{ 
+				$config = preg_match("/" . $ini . "='(.*)';/", $str, $res); 
+			} 
+			Return $res[1]; 
+		} 
+	} 
 
-function updateconfig($file, $ini, $value,$type="string") 
-{ 
-$str = file_get_contents($file); 
-$str2=""; 
-if($type=="int") 
-{ 
-$str2 = preg_replace("/" . $ini . "=(.*);/", $ini . "=" . $value . ";", $str); 
-} 
-else 
-{ 
-$str2 = preg_replace("/" . $ini . "=(.*);/", $ini . "=\"" . $value . "\";",$str); 
-} 
-file_put_contents($file, $str2); 
-} 
+	function updateconfig($file, $ini, $value,$type="string") 
+	{ 
+		$str = file_get_contents($file); 
+		$str2=""; 
+		if($type=="int") 
+		{ 
+			$str2 = preg_replace("/" . $ini . "=(.*);/", $ini . "=" . $value . ";", $str); 
+		} 
+		else 
+		{ 
+			$str2 = preg_replace("/" . $ini . "=(.*);/", $ini . "=\"" . $value . "\";",$str); 
+		} 
+		file_put_contents($file, $str2); 
+	} 
 
 
 	$param = $_SERVER["QUERY_STRING"];
@@ -63,11 +63,11 @@ file_put_contents($file, $str2);
 	$mysql_database=getconfig($config, "mysql_database", "string");; // 数据库的名字
 
 	$link=mysql_connect($server_name,$username,$password);
-    if(!$link) echo "没有连接成功!";
+	if(!$link) echo "没有连接成功!";
     mysql_select_db($mysql_database, $link); //选择数据库
     mysql_query("SET NAMES utf8");
 
-	
+    
 
     $q = "SELECT title,modifydate,content FROM blog where id=$blogID"; //SQL查询语句
 
@@ -77,19 +77,19 @@ file_put_contents($file, $str2);
     if(!$rs){die("Valid result!");}
 
     $count = mysql_num_rows($rs); 
-	if($count <= 0)
-		{die("invalid blog id:$blogID");}
+    if($count <= 0)
+    	{die("invalid blog id:$blogID");}
 
-	$title="";
-	$content="";
+    $title="";
+    $content="";
     while($row = mysql_fetch_array($rs)){
 
-		$title=$row[0];
-		$content=$row[2];
-		echo "<div id=\"tmp_title\" style=\"display:none;\">$title</div>";
-		echo "<div id=\"tmp_content\" style=\"display:none;\">$content</div>";
-		break;
-	}
+    	$title=$row[0];
+    	$content=$row[2];
+    	echo "<div id=\"tmp_title\" style=\"display:none;\">$title</div>";
+    	echo "<div id=\"tmp_content\" style=\"display:none;\">$content</div>";
+    	break;
+    }
 
 
     mysql_free_result($rs); //关闭数据集	
@@ -97,25 +97,25 @@ file_put_contents($file, $str2);
     
 
 
-	$htmlData = '';
-	if (!empty($_POST['content'])) {
-		if (get_magic_quotes_gpc()) {
-			$htmlData = stripslashes($_POST['content']);
-		} else {
-			$htmlData = $_POST['content'];
-		}
-	}
+    $htmlData = '';
+    if (!empty($_POST['content'])) {
+    	if (get_magic_quotes_gpc()) {
+    		$htmlData = stripslashes($_POST['content']);
+    	} else {
+    		$htmlData = $_POST['content'];
+    	}
+    }
 }
 
-	
-	
 
 
-	
+
+
+
 ?>
 <script>
-		
-		KindEditor.ready(function(K) {
+	
+	KindEditor.ready(function(K) {
 			//alert(g_param);
 			$('#text_title').val($('#tmp_title').html());
 			$('#text_content').val($('#tmp_content').html());
@@ -140,7 +140,7 @@ file_put_contents($file, $str2);
 			});
 			prettyPrint();
 		});
-</script>
+	</script>
 
 
 </head>

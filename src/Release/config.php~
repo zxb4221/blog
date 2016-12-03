@@ -1,6 +1,0 @@
-<?php 
-$server_name="sql105.0fees.us"; //数据库服务器名称 
-$username="0fe_18522827"; // 连接数据库用户名 
-$password="2475459189"; // 连接数据库密码 
-$mysql_database="0fe_18522827_db"; // 数据库的名字
-?> 

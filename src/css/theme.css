@@ -1,0 +1,59 @@
+
+
+div.app_nav, div#page, .comment_title, tr.mouse_over {
+    background-color: #FFF;
+}
+
+div#local, div#main, .blog_main, .pagination a:hover, .pagination a:active {
+    background-color: white;
+    
+}
+
+
+div.nav, div#app_list div.decorate, a:hover, div#branding, input.button, input.submit, td.buttons a, .pagination span.current {
+    text-decoration: underline;
+}
+
+
+.blog_bottom li {
+    border-right-color: #108AC6;
+    color: #999;
+}
+
+table.admin thead, .pagination a, .pagination a:visited {
+    color: #108AC6;
+}
+
+div.app_nav, .pagination span.current {
+    border-color: #108AC6;
+}
+.pagination span.disabled {
+    padding: 2px 5px 2px 5px;
+    margin: 2px;
+    border: 1px solid #eee;
+    color: #ddd;
+}
+
+
+/*new*/
+.white{ color:#FFF !important;}
+
+
+#blog_navbar{
+background-color: #FFFFFF;
+}
+
+
+#blog_navbar .blog_navbar_for a:link{color: #000 ; background-color:#effaff;}
+.blog_main_title{color: #000;}
+
+.about_bar{ background:#CCCCCC;color:#108AC6 ;}
+
+.view a:hover{color:#108AC6;}
+.list_current{}
+.list_current a{ color:#FF6600; font-weight:bold;}
+.list_current a:hover{ color:#FFFFFF; background:#FF6600;}
+
+
+#my_resume .editing a.del:hover,
+#my_resume .editing a.add:hover{color: #108AC6}

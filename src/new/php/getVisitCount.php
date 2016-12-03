@@ -1,4 +1,13 @@
 <?php
+	
+	$g_VisitCount=0;
+	$g_BlogCount=0;
+
+	$g_BlogTypesName=array();
+	$g_BlogTypesId=array();
+	$g_BlogCountForType=array();
+	$g_BlogTypeHtmlText="";
+
 	function getconfig($file, $ini, $type="string") 
 	{ 
 		if ($type=="int") 
@@ -35,8 +44,7 @@
 	} 
 
 
-
-	$config = "./config.php";
+	$config = "../config.php";
 	$server_name=getconfig($config, "server_name", "string");  //数据库服务器名称 
 	$username=getconfig($config, "username", "string") ; // 连接数据库用户名 
 	$password=getconfig($config, "password", "string") ; // 连接数据库密码 
@@ -48,30 +56,43 @@
     mysql_select_db($mysql_database, $link); //选择数据库
     mysql_query("SET NAMES utf8");
 
-	//select a.id,b.count from blog a,blog_read_count b where a.id=b.blog_id and a.id=5;
-
-
-    $q = "select id,title,modifydate,read_count from blog order by modifydate desc";
-
-
-
+    $q = "select sum(read_count) from blog";
     $rs = mysql_query($q); //获取数据集
-
-    //echo "<div id=\"temp_container\" style=\"display:none;\">";
-
     while($row = mysql_fetch_array($rs)){
-    	echo "<article class=\"post post-with-tags\"><header class=\"post-title\"><a href=\"blogDetail.php?id=";
-		echo "$row[0]"; //链接文章ID		
-		echo "\">";
-		echo "$row[1]"; //显示title
-
-		echo "</a></header><div class=\"post-meta\"><span class=\"post-meta-author\">Lucifer</span><span class=\"post-meta-ctime\">";
-		echo "$row[2]";	//显示日期
-		echo "</span></div>";
-		//echo "$row[1]";
-		echo "<footer class=\"post-tags\"><a href=\"#\" class=\"tag\"><span class=\"tag_name\">stream</span></a><a href=\"#\" class=\"tag\"><span class=\"tag_name\">nodejs</span></a><a href=\"#\" class=\"tag\"><span class=\"tag_name\">前端</span></a><a href=\"#\" class=\"tag\"><span class=\"tag_name\">平台</span></a></footer></article>";
+		$g_VisitCount=(int)$row[0]; //链接文章ID		
+		break;
 	}
-	//echo "</div>";
 
-    mysql_free_result($rs); //关闭数据集	
-    ?>
+	$q = "select count(*) from blog";
+    $rs = mysql_query($q); //获取数据集
+    while($row = mysql_fetch_array($rs)){
+		$g_BlogCount=(int)$row[0]; //链接文章ID		
+		break;
+	}
+
+	$q = "select id,name from blog_type";
+    $rs = mysql_query($q); //获取数据集
+    while($row = mysql_fetch_array($rs)){
+		array_push($g_BlogTypesId,(string)$row[0]);		
+		array_push($g_BlogTypesName,(string)$row[1]);
+	}
+
+
+	foreach($g_BlogTypesId as $val)
+	{
+		$q = "select count(*) from blog where type_id=$val";
+		$rs = mysql_query($q); //获取数据集
+		while($row = mysql_fetch_array($rs)){
+			array_push($g_BlogCountForType,(int)$row[0]);
+		}
+	}
+
+	
+    for ($i= 0;$i< count($g_BlogTypesName); $i++){ 
+      $g_BlogTypeHtmlText .="<li><a href=\"#\">$g_BlogTypesName[$i]($g_BlogCountForType[$i])</a></li>";
+    } 
+
+    mysql_free_result($rs); //关闭数据集
+
+
+?>
