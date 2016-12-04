@@ -49,78 +49,96 @@
 
 
 	$param = $_SERVER["QUERY_STRING"];
-	$arrParam = split("=", $param);
+	$arrParam = explode("=", $param);
 	$blogID = $arrParam[1];
 	
 	echo $blogID;		
 	echo "<div id=\"tmp_id\" style=\"display:none;\">$blogID</div>";
-	if($blogID!="-1")
-	{
-		$config = "../config.php";
+
+
+	$config = "../config.php";
 	$server_name=getconfig($config, "server_name", "string");  //数据库服务器名称 
 	$username=getconfig($config, "username", "string") ; // 连接数据库用户名 
 	$password=getconfig($config, "password", "string") ; // 连接数据库密码 
 	$mysql_database=getconfig($config, "mysql_database", "string");; // 数据库的名字
 
-	$link=mysql_connect($server_name,$username,$password);
+	$link=mysqli_connect($server_name,$username,$password,$mysql_database);
 	if(!$link) echo "没有连接成功!";
-    mysql_select_db($mysql_database, $link); //选择数据库
-    mysql_query("SET NAMES utf8");
-
-    
-
-    $q = "SELECT title,modifydate,content FROM blog where id=$blogID"; //SQL查询语句
+	$link->set_charset("utf8");
 
 
+	$type_id=-1;
 
-    $rs = mysql_query($q); //获取数据集
-    if(!$rs){die("Valid result!");}
-
-    $count = mysql_num_rows($rs); 
-    if($count <= 0)
-    	{die("invalid blog id:$blogID");}
-
-    $title="";
-    $content="";
-    while($row = mysql_fetch_array($rs)){
-
-    	$title=$row[0];
-    	$content=$row[2];
-    	echo "<div id=\"tmp_title\" style=\"display:none;\">$title</div>";
-    	echo "<div id=\"tmp_content\" style=\"display:none;\">$content</div>";
-    	break;
-    }
-
-
-    mysql_free_result($rs); //关闭数据集	
-
-    
-
-
-    $htmlData = '';
-    if (!empty($_POST['content'])) {
-    	if (get_magic_quotes_gpc()) {
-    		$htmlData = stripslashes($_POST['content']);
-    	} else {
-    		$htmlData = $_POST['content'];
-    	}
-    }
-}
+	if($blogID!="-1")
+	{
+		
 
 
 
+	    $q = "SELECT title,modifydate,content,type_id FROM blog where id=$blogID"; //SQL查询语句
 
 
 
-?>
-<script>
-	
-	KindEditor.ready(function(K) {
+	    $rs = $link->query($q);
+	    if(!$rs){die("Valid result!");}
+
+
+	    $title="";
+	    $content="";
+	    
+	    while($row = $rs->fetch_assoc()){
+
+	    	$title=$row["title"];
+	    	$content=$row["content"];
+	    	$type_id=$row["type_id"];
+
+	    	echo "<div id=\"tmp_title\" style=\"display:none;\">$title</div>";
+	    	echo "<div id=\"tmp_content\" style=\"display:none;\">$content</div>";
+	    	echo "<div id=\"tmp_type_id\" style=\"display:none;\">$type_id</div>";
+	    	break;
+	    }
+
+
+
+	    $htmlData = '';
+	    if (!empty($_POST['content'])) {
+	    	if (get_magic_quotes_gpc()) {
+	    		$htmlData = stripslashes($_POST['content']);
+	    	} else {
+	    		$htmlData = $_POST['content'];
+	    	}
+	    }
+	}
+	echo "<select id=\"tmp_blogType\" style=\"display:none;\">";
+
+	$q = "select id,name from blog_type";
+	$rs = $link->query($q);
+	if(!$rs){die("Valid result!");}
+	while($row = $rs->fetch_assoc()){
+		$id=$row["id"];
+		$name=$row["name"];
+		if($type_id == $id)
+			echo "<option selected value =\"$id\">$name</option>";
+		else
+			echo "<option value =\"$id\">$name</option>";
+	}
+	echo "</select>";
+	$link->close();
+
+
+
+
+	?>
+	<script>
+
+		KindEditor.ready(function(K) {
 			//alert(g_param);
 			$('#text_title').val($('#tmp_title').html());
 			$('#text_content').val($('#tmp_content').html());
 			$('#text_blogID').val($('#tmp_id').html());
-			
+			$('#sel_blog_type').html($('#tmp_blogType').html());
+			$('#text_blog_type_id').val($('#tmp_type_id').html());
+
 			var editor1 = K.create('textarea[name="content"]', {
 				cssPath : '../js/kindeditor/plugins/code/prettify.css',
 				uploadJson : './upload_json.php',
@@ -150,9 +168,14 @@
 		<input id="text_blogID" name="blogID" type="text" style="display:none;" value="-1"></input>
 		<input id="text_title" type="text" name="title" style="width:700px;height:25px;"/>
 		<textarea id="text_content" name="content" style="width:700px;height:500px;visibility:hidden;"></textarea>
-		<br />
-		<input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
-	</form>
+		<br/>
+		<input id="text_blog_type_id" name="blog_type"  readonly="readonly">
+		<select id="sel_blog_type" onchange= "$('#text_blog_type_id').val(this.value);">	  
+		</select>
+	</input>
+	<br/>
+	<input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
+</form>
 </body>
 </html>
 

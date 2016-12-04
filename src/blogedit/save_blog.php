@@ -9,10 +9,13 @@
 	$author = "zxb";
 	$blogTitle = $_POST["title"];
 	$blogContent = $_POST["content"];
-	
+	$blog_type_id = $_POST["blog_type"];
+
 	echo $blogTitle;
 	echo $blogContent;	
-	echo $id;
+	echo "blog_id:$id<br/>";
+	echo "blog_type_id:$blog_type_id";
+
 
 	function getconfig($file, $ini, $type="string") 
 	{ 
@@ -58,10 +61,9 @@
 	$password=getconfig($config, "password", "string") ; // 连接数据库密码 
 	$mysql_database=getconfig($config, "mysql_database", "string");; // 数据库的名字
 
-	$link=mysql_connect($server_name,$username,$password);
+	$link=mysqli_connect($server_name,$username,$password,$mysql_database);
     if(!$link) echo "没有连接成功!";
-    mysql_select_db($mysql_database, $link); //选择数据库
-    mysql_query("SET NAMES utf8");
+    $link->set_charset("utf8");
 	
 	//单引号转义
 	$blogTitle = str_replace('\'', "''", $blogTitle);
@@ -70,14 +72,14 @@
 	
 	
 	if($id == -1){
-		$sql = "insert into blog(title, content, author, publishdate, modifydate) values('$blogTitle', '$blogContent', '$author', now(), now())";
+		$sql = "insert into blog(title, content, author, type_id, publishdate, modifydate) values('$blogTitle', '$blogContent', '$author', $blog_type_id, now(), now())";
 		echo "-1";	
 	}
 	else
-		$sql = "update blog set title='$blogTitle',content='$blogContent',author='$author',modifydate=now() where id=$id";
+		$sql = "update blog set title='$blogTitle',content='$blogContent',author='$author', type_id=$blog_type_id, modifydate=now() where id=$id";
 	
-	mysql_query($sql); 
-
+	$rs = $link->query($sql);
+	$link->close();
     
 ?>
 </head>

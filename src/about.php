@@ -87,17 +87,17 @@
     <div id="local">
       <div class="local_top"></div>
       <div id="blog_owner">
-        <div id="blog_owner_logo"><a href="/"><img alt="Lucifer的博客" class="logo" src="img/picture.jpg" title="Lucifer的博客: " width=""></a></div>
-        <div id="blog_owner_name">Lucifer</div>
-      </div>
+    <div id="blog_owner_logo"><a href="/"><img alt="Lucifer的博客" class="logo" src="img/picture.jpg" title="Lucifer的博客" width=""></a></div>
+  </div>
 
-      <div id="blog_actions">
-        <ul>
-          <li>阅读: <?php echo "$g_VisitCount"; ?></li>
-          <li>性别: 男</li>
-          <li>来自: 北京</li>
-        </ul>
-      </div>
+  <div id="blog_actions">
+    <ul>
+      <li>作者: Lucifer</li>
+      <li>性别: 男</li>
+      <li>来自: 北京</li>
+      <li>阅读: <?php echo "$g_VisitCount"; ?></li>
+    </ul>
+  </div>
 
 
 
