@@ -1,110 +1,89 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr">
-<head>
+<html><head>
   <?php include_once("config.php") ?>
   <?php include_once("php/common.php") ?>
   <?php include_once("php/getData.php") ?>
-
+	
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-
   <meta name="keywords" content="database,mysql,linux,percona,数据库" />
   <meta name="description" content="database,mysql,linux,percona" />
 
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<title><?php echo get_title(); ?></title>
 
-  <link href="css/index.css" media="screen" rel="stylesheet" type="text/css">
-
-
-  <title><?php echo get_title(); ?></title>
-<style>
-.ul_other
-{
-list-style-type:none;
-margin:0;
-padding:0;
-margin-left:0;
-}
-.a_other:link,.a_other:visited
-{
-display:block;
-font-weight:bold;
-color:#FFFFFF;
-background-color:#108ac6;
-width:120px;
-text-align:center;
-padding:4px;
-text-decoration:none;
-text-transform:uppercase;
-}
-.a_other:hover,.a_other:active
-{
-background-color:#cc0000;
-}
-.li_other
-{
-padding:0px;
-}
-</style>
-
-
+<link rel="stylesheet" type="text/css" href="css/style.css">
 
 </head>
+
 <body>
-  <div id="page">
-    <div id="branding" class="clearfix" style="overflow: hidden;background: none;padding:0 0 2px;">
-   </div>
-   <div id="branding" class="clearfix">
-    <div id="blog_name">
-      <h1><a href="/">welcome to my technology database</a></h1>
-      
-    </div>
-    <div id="fd"></div>
-    <div id="blog_navbar">
-      <ul id="blog_navbar_ul">
-        
-        <?php
-        	if ($type == -1){
-        		echo "<li class=\"blog_navbar_for\"><a href=\"#\"><strong>最新文章</strong></a></li>";
-        	}else{
-        		echo "<li><a href=\"index.php\"><strong>最新文章</strong></a></li>";
-        	}
-        	
-	        for($i=0;$i<count($g_BlogTypesName);$i++){
-	        	if ($i < 5){
-	        		if ($g_BlogTypesId[$i] == $type){
-	        			echo "<li class=\"blog_navbar_for\"><a href=\"index.php?type=$g_BlogTypesId[$i]\">$g_BlogTypesName[$i]</a></li>";
-	        		}
-	        		else{
-	    				echo "<li><a href=\"index.php?type=$g_BlogTypesId[$i]\">$g_BlogTypesName[$i]</a></li>";
-	    			}
-	    		}
-	        }
-	        
-	        if(count($g_BlogTypesName) > 5){
-	    		echo "<li><a id=\"a_hide\" class=\"nav-other\" href=\"javascript:void(0)\">其他</a><div id=\"div_hide\" class=\"more-nav-box\" ><ul class=\"ul_other\">";
-	    		for($i=5;$i<count($g_BlogTypesName);$i++){
-	    			echo "<li style=\"padding:0px;\" class=\"li_other\"><a class=\"a_other\" href=\"index.php?type=$g_BlogTypesId[$i]\">$g_BlogTypesName[$i]</a></li>";
-	    		}
-	    		echo "</ul></div></li>";
-	        }
-	        
-        ?>
-      </ul>
 
-      <div id="fd"></div>         
-    </div>
-  </div>
+<!--顶部导航-->
+<div class="page-title-fixed">
+	<div class="container">
+		<h1 class="logo">
+			<a href="index.php">
+				<span class="logo-name">mytecdb.com</span>
+			</a>
+		</h1>
+		<ul class="page-menus">
+			<li>
+				<a href="index.php" class="active">最新文章</a>
+			</li>
+			<li>
+				<a href="javascript:;">MySQL</a>
+			</li>
+			<li>
+				<a href="javascript:;">PostgreSQL</a>
+			</li>
+			<li>
+				<a href="javascript:;">Oracle</a>
+			</li>
+			<li>
+				<a href="javascript:;">Linux</a>
+			</li>
+			<li>
+				<a href="postMessage.html">Message</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<!--内容-->
+<div class="wrapper">
+	<div class="container">
+		<div class="sidebar-wrapper fixed">
+			<div class="sidebar" style="height: 428px;">
+				<ul class="menu-group">
+					<li class="menu-item menu-item-1 active">
+						<a class=" sub-title" href="javascript:;">MySQL</a>
+						<ul>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=4">MySQL安装</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=7">MySQL升级</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=9">MySQL优化</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=10">MySQL死锁</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=5">MySQL相关工具</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="index.php?type=6">MySQL Bug</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-  <div id="content" class="clearfix">
-    <div id="main">
+		<div class="main-container">
 
-      <div class="blog_main_title">
-        <span>最新文章</span>
-        <div id="fd"></div>
-      </div>
+			<div class="markdown">
 
-    <?php
+<?php
     $countOffset=$currentPage*$countPerPage;
     
     $server_name=get_server_name();//($config, "server_name", "string");  //数据库服务器名称 
@@ -130,6 +109,9 @@ padding:0px;
 	
 	
     $rs = mysqli_query($link,$q); //获取数据集
+    if (mysqli_num_rows($rs) <= 0){
+    	echo "<p>没有相关数据！</p>";
+    }
     while($row = mysqli_fetch_row($rs)){
     $abstract = preg_replace_callback($search, function ($matches) {
             return "";
@@ -194,35 +176,73 @@ padding:0px;
   
   ?>
 
+			
+			</div>
+		</div>
+	</div>
+	
+	<!--图片弹窗-->
+	<div class="imgtc" style="display: none;">
+		<img src="">
+	</div>
+	
 </div>
 
-
-</div>
-
-<div id="footer" class="clearfix">
-  <div id="copyright">
-    <hr>
-    声明：本站发布的信息，版权属于作者，受法律保护，若有侵权，请联系站长删除。<br>
-    © 2019-2020 www.mytecdb.com.   All rights reserved.
-  </div>
-</div>
-</div>
-
-</body>
-<script>
-  (function(){
-  	  var a_hide = document.getElementById('a_hide');
-      var box = document.getElementById('div_hide');
- 	  var timer = null;
-      a_hide.onmouseup = a_hide.onmouseover = box.onmouseover = function(){
-      	  if(timer) clearTimeout(timer);
-          box.style.display = 'block';
-      }
-      a_hide.onmouseout = box.onmouseout = function(){
-      	  timer = setTimeout(function(){
-            box.style.display = 'none';
-          },500);
-      }
-  })();
+<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function() {
+		//左侧菜单
+		var h = 0;
+		$('.menu-item-1 .sub-title').click(function() {
+			$(this).parent().toggleClass('active collapse');
+			$('.menu-item-1').each(function() {
+				h += $(this).height();
+			})
+			//给菜单赋值高度
+			$('.sidebar').css({
+				"height": h
+			});
+			h = 0;
+		})
+		//右上角鼠标悬浮触发下拉
+		$('.dropdown-toc').hover(function() {
+			$('.dropdown-body').toggle();
+		})
+		//滚动监听
+		var leg = $('.maodian').length;
+		$(window).scroll(function() {
+			$('.imgtc').hide(); //滚动后图片放大隐藏
+			var sh = $(window).scrollTop()
+			//右上悬浮
+			sh > 86 ? $('.anchor-toc').addClass('fixed') : $('.anchor-toc').removeClass('fixed');
+			//循环遍历锚点
+			for(i = 1; i <= leg; i++) {
+				if($("#mao" + i).offset().top-140 <= sh) {
+					$('.maodian').removeClass('active');
+					$('#mao' + i).addClass("active");
+					$('.toc-current').text($('#mao'+i).parent().text());
+					$('.dropdown-body ul li').removeClass('active').eq(i-1).addClass('active');
+				}
+				
+			}
+			sh < 140?$('.toc-current').text("本页导航"):"";
+		})
+		//右上角点击
+		$('.dropdown-body ul li').click(function(){
+			var jt = $(this).index();
+			$(window).scrollTop($('.maodian').eq(jt).offset().top-140);
+		})
+		//图片放大
+		$('img').click(function(){
+			var img = $(this).attr('src');
+			$('.imgtc').show().find('img').attr('src',img);
+		})
+		$('.imgtc').click(function(){
+			$(this).toggle();
+		})
+	})
 </script>
-</html>
+
+
+
+</body></html>

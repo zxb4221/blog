@@ -1,76 +1,10 @@
 <html><head>
-  <?php include_once("config.php") ?>
-	<?php
-
-  $blogTitle="";
-  $blogContent="";
-  $blogDate="";
-
-  $param = $_SERVER["QUERY_STRING"];
-  $arrParam = explode("=", $param);
-  $blogID = $arrParam[1];
-
-
-  $config = "./config.php";
-  $server_name=get_server_name();//($config, "server_name", "string");  //数据库服务器名称 
-  $username=get_user_name();//($config, "username", "string") ; // 连接数据库用户名 
-  $password=get_password();//($config, "password", "string") ; // 连接数据库密码 
-  $mysql_database=get_database();//($config, "mysql_database", "string");; // 数据库的名字
-
-  $link=mysqli_connect($server_name,$username,$password,$mysql_database);
-    if(!$link) {die("没有连接成功!");}
-    
-    mysqli_query($link,"SET NAMES utf8");
-
-
-
   
-
-    $q = "SELECT title,modifydate,content,read_count,name FROM blog,blog_type where blog.type_id=blog_type.id and blog.id=$blogID"; //SQL查询语句
-
-
-
-    $rs = mysqli_query($link,$q); //获取数据集
-    if(!$rs){die("Valid result!");}
-
-    
-  
-    while($row = mysqli_fetch_row($rs)){
-    $blogTitle=(string)$row[0];
-    $blogDate=(string)$row[1];
-    $blogContent = (string)$row[2];
-    $read_count = (string)$row[3];
-    $blog_type = (string)$row[4];
-    break;
-  }
-
-    mysqli_free_result($rs); //关闭数据集
-
-    //文章阅读量增加
-    $sql = "update blog set read_count=read_count+1 where id = $blogID";
-    mysqli_query($link,$sql); //获取数据集
-    
-    
-    //记录访问来源
-    $ip = $_SERVER["REMOTE_ADDR"];
-    $sql = "insert into visit_trace(url,visitdate) values('($ip,$blogTitle)',now())";
-    if(isset($_SERVER['HTTP_REFERER'])){
-      $url = $_SERVER['HTTP_REFERER'];
-      if($url != ""){
-        $sql = "insert into visit_trace(url,visitdate) values('$url($ip,$blogTitle)',now())";
-      }
-    }
-    mysqli_query($link,$sql);
-    
-    
-    mysqli_close($link);
-?>
-
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="keywords" content="database,mysql,linux,percona,数据库" />
   <meta name="description" content="database,mysql,linux,percona" />
 
-<title><?php echo "$blogTitle-mytecdb"; ?></title>
+<title>leave message-mytecdb</title>
 
 <link rel="stylesheet" type="text/css" href="css/style.css">
 
@@ -88,7 +22,7 @@
 		</h1>
 		<ul class="page-menus">
 			<li>
-				<a href="index.php" class="active">最新文章</a>
+				<a href="index.php">最新文章</a>
 			</li>
 			<li>
 				<a href="javascript:;">MySQL</a>
@@ -103,7 +37,7 @@
 				<a href="javascript:;">Linux</a>
 			</li>
 			<li>
-				<a href="postMessage.html">Message</a>
+				<a href="postMessage.html" class="active">Message</a>
 			</li>
 		</ul>
 	</div>
@@ -143,36 +77,32 @@
 
 		<div class="main-container">
 
-			<div class="markdown">
+		<div class="markdown">
 
-        <div class="blog_main">
-  <div class="blog_title">
-    <h2 style="color:#108AC6;">
-      <?php echo "$blogTitle"; ?>
-      <em class="actions"></em>
-    </h2>
-      
-        <div class="news_tag"><a href="#"><?php echo "$blog_type"; ?></a>&nbsp;</div>
-       
-      </div>
+        
+		  <div id="blog_content" class="blog_content">
+		    <div >
+		    	<label>昵称：</label><input id="user" type="" name="">
+		    </div>
+		    <div>
+		    	<label>邮箱：</label><input id="email" type="" name="">
+		    </div>
+		    <div>
+		    	<label>留言：</label><textarea id="message" style="width: 80%;height: 100px;" placeholder="写下你的留言..."></textarea>
+		    	<button id="btnMessageCommit" style="width: 80px;height: 30px;" type="button">提交</button>
+		  	</div>
+		  </div>
 
-  <div id="blog_content" class="blog_content">
-    <?php echo "$blogContent"; ?>
-  </div>
-  
+		  <br>
+		  <hr>
+		  <div id="message_container">
+		  </div>
 
-  <div class="blog_bottom">
-    <ul>
-      <li><?php echo "$blogDate"; ?></li>
-      <li><?php echo "浏览 $read_count"; ?></li>
-    
-    </ul>    
-  </div>  
-      
-</div>
+		  
+		</div>
 
 			
-			</div>
+		</div>
 		</div>
 	</div>
 	
@@ -235,7 +165,58 @@
 		$('.imgtc').click(function(){
 			$(this).toggle();
 		})
+
+		//提交留言
+		$("#btnMessageCommit").click(function(){
+		  var user = $("#user").val();
+		  var email = $("#email").val();
+		  var message = $("#message").val();
+		  
+		  //下面转义特殊字符
+		  user = $('<div/>').text(user).html();
+		  email = $('<div/>').text(email).html();
+		  message = $('<div/>').text(message).html();
+
+		  data = {"user":user,"email":email,"message":message}
+
+		  if (user == "" || email== "" || message == ""){
+		  	alert("昵称、邮箱和留言不能为空！");
+		  }else{
+		  	$.post("http://mytecdb.com/api/postMessage.php",data,function(result,status){
+		  		if(status != "success"){
+		  			alert("调用失败！");
+		  		}else{
+		  			if (result.code == 0){
+		  				alert("留言成功！");
+					    window.location.reload();
+		  			}
+		  			else{
+		  				alert(result.message);
+		  			}
+		  		}   
+			});
+		  }
+		});
 	})
+
+	//加载留言
+	$.get("http://mytecdb.com/api/getMessage.php",function(result,status){
+  		if(status != "success"){
+  			alert("调用失败！")
+  		}else{
+
+  			for(let i=0;i<result.length;i++){
+  				var addHtml = '<div class="blog_main"><div class="blog_title"><h3><a style="pointer-events: none;">'+result[i].user+'</a></h3><label style="font-size:12px;">'+result[i].ts+'</label></div><div class="blog_content">'+result[i].message+'</div></div>';
+        		$("#message_container").append(addHtml);
+    		}
+
+    		if (result.length <= 0){
+    			$("#message_container").append("<p>当前没有留言~</p>");
+    		}
+  		}
+	});
+
+
 </script>
 
 
