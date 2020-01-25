@@ -1,7 +1,7 @@
 <html><head>
   <?php include_once("config.php") ?>
   <?php include_once("php/common.php") ?>
-  <?php include_once("php/getDataIndex.php") ?>
+  <?php include_once("php/getDataMySQL.php") ?>
 	
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -26,10 +26,10 @@
 		</h1>
 		<ul class="page-menus">
 			<li>
-				<a href="index.php" class="active">最新文章</a>
+				<a href="index.php">最新文章</a>
 			</li>
 			<li>
-				<a href="mysql.php">MySQL</a>
+				<a href="mysql.php" class="active">MySQL</a>
 			</li>
 			<li>
 				<a href="javascript:;">PostgreSQL</a>
@@ -51,20 +51,48 @@
 	<div class="container">
 		<div class="sidebar-wrapper fixed">
 			<div class="sidebar">
-
-
-				<div class="whitebg paihang">
-      <h3 class="htitle">站点声明</h3>
-
-      <p>本站为个人博客，分享数据库相关的技术文章、入门教程，如果您对MySQL、PostgreSQL、Oracle、Linux、Python等有兴趣，欢迎关注本站，共同学习进步。</p><br/>
-      <p>联系方式：zxb4221@sina.com</p>
-    </div>
-
-    <div id="topReadCount" class="whitebg paihang">
-    </div>
-
-
-
+				<ul class="menu-group whitebg">
+					<li class="menu-item menu-item-1 active">
+						<a class=" sub-title" href="javascript:;">MySQL入门</a>
+						<ul>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=4">MySQL安装部署</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=12">MySQL日常使用</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=7">MySQL版本升级</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=8">MySQL数据类型</a>
+							</li>
+						</ul>
+					</li>
+					<li class="menu-item menu-item-1 active">
+						<a class=" sub-title" href="javascript:;">MySQL进阶</a>
+						<ul>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=14">MySQL Binlog</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=9">MySQL性能优化</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=10">MySQL死锁案例</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=6">MySQL Bug</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=5">MySQL相关工具</a>
+							</li>
+							<li class="menu-item menu-item-2">
+								<a href="mysql.php?type=11">MySQL学习资料推荐</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 		</div>
 
@@ -73,11 +101,6 @@
 			<div class="markdown">
 
 <?php
-
-	if($error != 0){
-		die($error_msg);
-	}
-
     $countOffset=$currentPage*$countPerPage;
     
     $server_name=get_server_name();//($config, "server_name", "string");  //数据库服务器名称 
@@ -89,7 +112,7 @@
     $link=mysqli_connect($server_name,$username,$password,$mysql_database);
     error_reporting($error_level);
 
-    if(!$link) {die("没有连接成功!");}
+    if(!$link) {die("数据库连接失败!");}
   
     mysqli_query($link,"SET NAMES utf8");
 
@@ -106,7 +129,6 @@
     if (mysqli_num_rows($rs) <= 0){
     	echo "<p>没有相关数据！</p>";
     }
-
     $cur_index = 0;
     while($row = mysqli_fetch_row($rs)){
     $abstract = preg_replace_callback($search, function ($matches) {
@@ -121,7 +143,8 @@
     echo "\">";
     echo "$row[1]"; //显示title
     echo "</a></h3></div><div class=\"blog_content\">$abstract</div><div class=\"blog_bottom\"><ul><li class=\"date\">$row[2]</li><li>浏览($row[3])</li> <!-- <li><a href=\"#\">评论(0)</a></li> --> <li>分类:<a style=\"margin-left:10px;\" href=\"#\">$row[6]</a></li> <!-- <li class=\"last\">标签:<a style=\"margin-left:10px;\" href=\"#\">MySQL</a><a style=\"margin-left:10px;\" href=\"#\">数据库</a><a style=\"margin-left:10px;\" href=\"#\">MySQL</a></li> --> </ul></div></section></div>";
-    $cur_index += 1;
+
+    $cur_index = $cur_index+1;
 
   }
 
@@ -137,30 +160,30 @@
 	     echo "<span class=\"disabled prev_page\" rel=\"prev\">« 上一页</span>";
 	    }
 	    else{
-	      echo "<a href=\"/?page=$prevPage\" class=\"prev_page\" rel=\"prev\">« 上一页</a>";
+	      echo "<a href=\"mysql.php?page=$prevPage\" class=\"prev_page\" rel=\"prev\">« 上一页</a>";
 	    }
 	
 	    if($currentPage-2 >= 0){
 	      $currentPageShow = $currentPage-2+1;
 	      $prevPage=$currentPage-2;
-	      echo "<a href=\"/?page=$prevPage\" rel=\"prev\">$currentPageShow</a>";
+	      echo "<a href=\"mysql.php?page=$prevPage\" rel=\"prev\">$currentPageShow</a>";
 	    }
 	    if($currentPage-1 >= 0){
 	      $currentPageShow = $currentPage-1+1;
 	      $prevPage=$currentPage-1;
-	      echo "<a href=\"/?page=$prevPage\" rel=\"prev\">$currentPageShow</a>";
+	      echo "<a href=\"mysql.php?page=$prevPage\" rel=\"prev\">$currentPageShow</a>";
 	    }
 	    $currentPageShow = $currentPage+1;
 	    echo "<span class=\"current\">$currentPageShow</span>";
 	    if($currentPage+1 < $allPageCount){
 	      $nextPage=$currentPage+1;
 	      $currentPageShow = $currentPage+1+1;
-	      echo "<a href=\"/?page=$nextPage\" rel=\"next\">$currentPageShow</a>";
+	      echo "<a href=\"mysql.php?page=$nextPage\" rel=\"next\">$currentPageShow</a>";
 	    }
 	    if($currentPage+2 < $allPageCount){
 	      $nextPage=$currentPage+2;
 	      $currentPageShow = $currentPage+2+1;
-	      echo "<a href=\"/?page=$nextPage\" rel=\"next\">$currentPageShow</a>";
+	      echo "<a href=\"mysql.php?page=$nextPage\" rel=\"next\">$currentPageShow</a>";
 	    }
 	
 	    $nextPage=$currentPage+1;
@@ -168,7 +191,7 @@
 	       echo "<span class=\"disabled next_page\" rel=\"next\">下一页 »</span>";
 	    }
 	    else{
-	      echo "<a href=\"/?page=$nextPage\" class=\"next_page\" rel=\"next\">下一页 »</a>";
+	      echo "<a href=\"mysql.php?page=$nextPage\" class=\"next_page\" rel=\"next\">下一页 »</a>";
 	    }
 	    echo "</div>";
   	}
@@ -190,29 +213,6 @@
 </footer>
 <script src="http://libs.baidu.com/jquery/1.10.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	var url_base = "http://mytecdb.com";
-
-	function loadTopReadCount(){
-		
-	  	var url = url_base+"/api/getTopReadCount.php";
-		$.get(url,function(result,status){
-	  		if(status != "success"){
-	  			alert("调用失败！");
-	  		}else{
-
-	  			$("#topReadCount").empty();
-	  			var addHtml = '<h3 class="htitle">点击排行</h3><ul>';
-	  			for(let i=0;i<result.length;i++){
-	  				addHtml += '<li><i></i><a href="/blogDetail.php?id=' + result[i].id + '" title="' + result[i].title + '" target="_blank">' + result[i].title + '</a></li>';
-	  			}
-	  			addHtml += '</ul>';
-
-	  				
-	        	$("#topReadCount").append(addHtml);	
-	  		}
-		});
-	}
-
 	$(function() {
 		//左侧菜单
 		var h = 0;
@@ -227,9 +227,6 @@
 			});
 			h = 0;
 		})
-
-		//加载阅读排行
-		loadTopReadCount();
 	})
 </script>
 </body></html>

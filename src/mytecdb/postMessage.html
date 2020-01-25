@@ -1,10 +1,10 @@
 <html><head>
   
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="keywords" content="database,mysql,linux,percona,数据库" />
-  <meta name="description" content="database,mysql,linux,percona" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="keywords" content="database,mysql,postgresql,oracle,python,c,c++,linux,percona,数据库" />
+  <meta name="description" content="本站提供数据库技术相关的文章,包括MySQL,PostgreSQL,Oracle,Linux,Python,数据库安装,升级,性能优化,源码分析,学习资料" />
 
-<title>leave message-mytecdb</title>
+<title>leave message-mytecdb-数据库之家</title>
 
 <link rel="stylesheet" type="text/css" href="css/style.css">
 
@@ -25,7 +25,7 @@
 				<a href="index.php">最新文章</a>
 			</li>
 			<li>
-				<a href="javascript:;">MySQL</a>
+				<a href="mysql.php">MySQL</a>
 			</li>
 			<li>
 				<a href="javascript:;">PostgreSQL</a>
@@ -46,58 +46,63 @@
 <div class="wrapper">
 	<div class="container">
 		<div class="sidebar-wrapper fixed">
-			<div class="sidebar" style="height: 428px;">
-				<ul class="menu-group">
-					<li class="menu-item menu-item-1 active">
-						<a class=" sub-title" href="javascript:;">MySQL</a>
-						<ul>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=4">MySQL安装</a>
-							</li>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=7">MySQL升级</a>
-							</li>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=9">MySQL优化</a>
-							</li>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=10">MySQL死锁</a>
-							</li>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=5">MySQL相关工具</a>
-							</li>
-							<li class="menu-item menu-item-2">
-								<a href="index.php?type=6">MySQL Bug</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+			<div class="sidebar">
+				<div class="whitebg paihang">
+			      <h3 class="htitle">站点声明</h3>
+
+			      <p>本站为个人博客，分享数据库相关的技术文章、入门教程，如果您对MySQL、PostgreSQL、Oracle、Linux、Python等有兴趣，欢迎关注本站，共同学习进步。</p><br/>
+			      <p>联系方式：zxb4221@sina.com</p>
+			    </div>
+
+			    <div id="topReadCount" class="whitebg paihang">
+			    </div>
 			</div>
 		</div>
 
 		<div class="main-container">
 
-		<div class="markdown">
-
+		<div class="markdown whitebg">
+			<div class="blog_title"><p>mytecdb-数据库之家</p></div>
+			<div class="blog_content">
+			
         
-		  <div id="blog_content" class="blog_content">
-		    <div >
-		    	<label>昵称：</label><input id="user" type="" name="">
-		    </div>
-		    <div>
-		    	<label>邮箱：</label><input id="email" type="" name="">
-		    </div>
-		    <div>
-		    	<label>留言：</label><textarea id="message" style="width: 80%;height: 100px;" placeholder="写下你的留言..."></textarea>
-		    	<button id="btnMessageCommit" style="width: 80px;height: 30px;" type="button">提交</button>
-		  	</div>
-		  </div>
+	<div>
+      <h3>留言</h3>
+      <ul>
+<!-- 评论 开始 -->
+<div class="pinglun">
+<div class="pl-520am">
 
-		  <br>
-		  <hr>
-		  <div id="message_container">
-		  </div>
+    
+      <div class="pl-area-post">
+        <div class="pl-post">
+          <div class="pl-textarea"><textarea class="pl-post-word" id="comment" placeholder="写下你想说的，开始我们的对话"></textarea>
+          </div>
+          <div class="pl-tools">
+             <ul>
+               
+               <li class="pl-tools-lastchild"><button class="pl-submit-btn" id="pl-submit-btn-main">发 布</button></li>
+               <li class="username"><input type="text" id="pl-username" class="pl-key" size="15" placeholder="你的昵称" value=""></li>
+             </ul>
+          </div>
+        </div>
+      </div>
 
+    <div class="pl-clr" id="pl-start"></div>
+    <div class="pl-header">共<em id="pl-totalnum">0</em>条留言<span class="pl-userinfo"></span></div>
+    <div class="pl-show-list" id="pl-show-all">
+    </div>
+
+
+</div>
+
+</div>
+<!-- 留言结束 -->
+</ul>
+</div>
+</div>
+
+<div class="blog_bottom"></div>
 		  
 		</div>
 
@@ -106,15 +111,58 @@
 		</div>
 	</div>
 	
-	<!--图片弹窗-->
-	<div class="imgtc" style="display: none;">
-		<img src="">
-	</div>
-	
 </div>
 
-<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+<footer class="footer" style="font-size:12px;margin-top:30px;">
+    	<div align="center">Copyright © 2020</div>
+        <div align="center">
+        	<a href="http://www.mytecdb.com" title="mytecdb-数据库之家">www.mytecdb.com</a> mytecdb All Rights Reserved.
+        </div>
+</footer>
+
+<script src="http://libs.baidu.com/jquery/1.10.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+	var url_base = "http://mytecdb.com";
+	function loadMessage(){
+		$.get(url_base+"/api/getMessage.php",function(result,status){
+	  		if(status != "success"){
+	  			alert("调用失败！");
+	  		}else{
+
+	  			$("#pl-show-all").empty();
+	  			for(let i=0;i<result.length;i++){
+	  				var offset = i%5;
+	  				var addHtml = '<div class="pl-area pl-show-box"><div class="pl-area-userpic"><img id="pl-userpic" src="/img/user_'+offset+'.jpg"></div><div class="pl-area-post"><div class="pl-show-title"><span>'+result[i].user+'</span> <span class="pl-show-time pl-fr">'+result[i].ts+'</span></div><div class="pl-show-saytext">'+result[i].message+'</div></div><div class="pl-clr"></div></div>';
+	        		$("#pl-show-all").append(addHtml);
+	    		}
+	    		$("#pl-totalnum").text(result.length);
+	  		}
+		});
+	}
+
+	function loadTopReadCount(){
+		
+	  	var url = url_base+"/api/getTopReadCount.php";
+		$.get(url,function(result,status){
+	  		if(status != "success"){
+	  			alert("调用失败！");
+	  		}else{
+
+	  			$("#topReadCount").empty();
+	  			var addHtml = '<h3 class="htitle">点击排行</h3><ul>';
+	  			for(let i=0;i<result.length;i++){
+	  				addHtml += '<li><i></i><a href="/blogDetail.php?id=' + result[i].id + '" title="' + result[i].title + '" target="_blank">' + result[i].title + '</a></li>';
+	  			}
+	  			addHtml += '</ul>';
+
+	  				
+	        	$("#topReadCount").append(addHtml);	
+	  		}
+		});
+	}
+
+
+
 	$(function() {
 		//左侧菜单
 		var h = 0;
@@ -129,92 +177,53 @@
 			});
 			h = 0;
 		})
-		//右上角鼠标悬浮触发下拉
-		$('.dropdown-toc').hover(function() {
-			$('.dropdown-body').toggle();
-		})
-		//滚动监听
-		var leg = $('.maodian').length;
-		$(window).scroll(function() {
-			$('.imgtc').hide(); //滚动后图片放大隐藏
-			var sh = $(window).scrollTop()
-			//右上悬浮
-			sh > 86 ? $('.anchor-toc').addClass('fixed') : $('.anchor-toc').removeClass('fixed');
-			//循环遍历锚点
-			for(i = 1; i <= leg; i++) {
-				if($("#mao" + i).offset().top-140 <= sh) {
-					$('.maodian').removeClass('active');
-					$('#mao' + i).addClass("active");
-					$('.toc-current').text($('#mao'+i).parent().text());
-					$('.dropdown-body ul li').removeClass('active').eq(i-1).addClass('active');
-				}
-				
-			}
-			sh < 140?$('.toc-current').text("本页导航"):"";
-		})
-		//右上角点击
-		$('.dropdown-body ul li').click(function(){
-			var jt = $(this).index();
-			$(window).scrollTop($('.maodian').eq(jt).offset().top-140);
-		})
-		//图片放大
-		$('img').click(function(){
-			var img = $(this).attr('src');
-			$('.imgtc').show().find('img').attr('src',img);
-		})
-		$('.imgtc').click(function(){
-			$(this).toggle();
-		})
 
 		//提交留言
-		$("#btnMessageCommit").click(function(){
-		  var user = $("#user").val();
-		  var email = $("#email").val();
-		  var message = $("#message").val();
+		$("#pl-submit-btn-main").click(function(){
+		  var user = $("#pl-username").val();
+
+		  
+		  var message = $("#comment").val();
 		  
 		  //下面转义特殊字符
 		  user = $('<div/>').text(user).html();
-		  email = $('<div/>').text(email).html();
 		  message = $('<div/>').text(message).html();
+		  
+		  
 
-		  data = {"user":user,"email":email,"message":message}
-
-		  if (user == "" || email== "" || message == ""){
-		  	alert("昵称、邮箱和留言不能为空！");
-		  }else{
-		  	$.post("http://mytecdb.com/api/postMessage.php",data,function(result,status){
-		  		if(status != "success"){
-		  			alert("调用失败！");
-		  		}else{
-		  			if (result.code == 0){
-		  				alert("留言成功！");
-					    window.location.reload();
-		  			}
-		  			else{
-		  				alert(result.message);
-		  			}
-		  		}   
-			});
+		  if(user == ""){
+		  	user = "匿名用户";
 		  }
+
+		  if (message == ""){
+		  	alert("留言不能为空！");
+		  	return;
+		  }
+		  data = {"user":user,"email":"z@126.com","message":message};
+
+	  	  $.post(url_base+"/api/postMessage.php",data,function(result,status){
+	  		if(status != "success"){
+	  			alert("调用失败！");
+	  		}else{
+	  			if (result.code == 0){
+	  				alert("留言成功！");
+				    $("#pl-username").val("");
+					$("#comment").val("");
+					loadMessage();
+	  			}
+	  			else{
+	  				alert(result.message);
+	  			}
+	  		}   
+		  });
+		  
 		});
+	
+		//加载排行
+		loadTopReadCount();
+		//加载留言
+		loadMessage();
 	})
-
-	//加载留言
-	$.get("http://mytecdb.com/api/getMessage.php",function(result,status){
-  		if(status != "success"){
-  			alert("调用失败！")
-  		}else{
-
-  			for(let i=0;i<result.length;i++){
-  				var addHtml = '<div class="blog_main"><div class="blog_title"><h3><a style="pointer-events: none;">'+result[i].user+'</a></h3><label style="font-size:12px;">'+result[i].ts+'</label></div><div class="blog_content">'+result[i].message+'</div></div>';
-        		$("#message_container").append(addHtml);
-    		}
-
-    		if (result.length <= 0){
-    			$("#message_container").append("<p>当前没有留言~</p>");
-    		}
-  		}
-	});
 
 
 </script>

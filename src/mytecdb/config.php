@@ -17,6 +17,6 @@ function get_database()
 }
 function get_title()
 {
-	return "welcome to my technology database";
+	return "mytecdb-数据库之家";
 }
 ?> 

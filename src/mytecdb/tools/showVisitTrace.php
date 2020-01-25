@@ -10,7 +10,7 @@
     if(!$link) {die("没有连接成功!");}
   mysqli_query($link,"SET NAMES utf8");
 
-  $q = "SELECT visitdate,url FROM visit_trace order by visitdate desc"; //SQL查询语句
+  $q = "SELECT visitdate,url FROM visit_trace order by visitdate desc limit 20"; //SQL查询语句
 
 
 

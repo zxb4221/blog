@@ -14,23 +14,27 @@ include_once("../config.php");
 
 if($_POST){
   
-  if( !array_key_exists("user", $_POST) || !array_key_exists("email", $_POST) || !array_key_exists("message", $_POST)){
+  if( !array_key_exists("blogId", $_POST) || !array_key_exists("type", $_POST)){
     $result = array('code'=>4,'message'=>"post param invalid!");
     exit(json_encode($result));
   }
-  $user = $_POST["user"];
-  $email = $_POST["email"];
-  $message = $_POST["message"];
+  $blogId = $_POST["blogId"];
+  $type = $_POST["type"];
   $ip = $_SERVER["REMOTE_ADDR"];
 
-  /*
-  $needle ='<';
-  if(count(explode($needle,$user))>1 || count(explode($needle,$email))>1 || count(explode($needle,$message))>1){
-    $result = array('code'=>5,'message'=>"post param contains invalid character!");
-    exit(json_encode($result));
-  }*/
+  
 
-  $q = "select id from message where ip='$ip' and ts > SUBDATE(now(),interval 5 minute)";
+  if($type == "zan"){
+    $q = "select id from zan where ip='$ip' and blog_id='$blogId' and ts > SUBDATE(now(),interval 5 minute)";
+  }else if($type == "cai"){
+    $q = "select id from cai where ip='$ip' and blog_id='$blogId' and ts > SUBDATE(now(),interval 5 minute)";
+  }else{
+    $result = array('code'=>5,'message'=>"param type($type) must be zan or cai!");
+    exit(json_encode($result));
+  }
+
+  
+
   $server_name=get_server_name(); 
   $username=get_user_name();
   $password=get_password();
@@ -43,20 +47,40 @@ if($_POST){
   }
     
   mysqli_query($link,"SET NAMES utf8");
+
+
+
   $rs = mysqli_query($link,$q); 
   if (mysqli_num_rows($rs) > 0){
     mysqli_close($link);
-    $result = array('code'=>3,'message'=>"your ip($ip) post message too many, please wait 5 minute.");
+    $result = array('code'=>3,'message'=>"your ip($ip) $type many, please wait 5 minute.");
     exit(json_encode($result));
   }
   
-  $user = str_replace("'", "\'", $user);
-  $email = str_replace("'", "\'", $email);
-  $message = str_replace("'", "\'", $message);
-  $message = str_replace("\n", "<br>", $message);
+  
 
-  $q = "insert into message(user,email,message,ip,ts) values('$user','$email','$message','$ip',now())";
-  $rs = mysqli_query($link,$q);
+  $blogId = str_replace("'", "\'", $blogId);
+  $type = str_replace("'", "\'", $type);
+  
+
+  
+
+  mysqli_query($link,"begin");
+
+  if($type == "zan"){
+    $q_i = "insert into zan(blog_id,ip,ts) values('$blogId','$ip',now())";
+    $q_u = "update blog set zan_count=zan_count+1 where id='$blogId'";
+  }else{
+    $q_i = "insert into cai(blog_id,ip,ts) values('$blogId','$ip',now())";
+    $q_u = "update blog set cai_count=cai_count+1 where id='$blogId'";
+  }
+
+
+  $rs = mysqli_query($link,$q_i);
+  $rs = mysqli_query($link,$q_u);
+
+  mysqli_query($link,"commit");
+
   mysqli_close($link);
     
   $result = array('code'=>0,'message'=>'suceessful');

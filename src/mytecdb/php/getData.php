@@ -44,6 +44,8 @@
       $g_BlogTypeHtmlText .="<li><a href=\"catalogViewer.php?typeID=$g_BlogTypesId[$i]\">$g_BlogTypesName[$i]($g_BlogCountForType[$i])</a></li>";
     }
 	
+	
+	
 	$type = -1;
 	
 	//分页
@@ -65,7 +67,8 @@
 	       	$type = $arrParam[1];
 	       	array_shift($arrParam);
 	       	array_shift($arrParam);
-	       }else{
+	       }
+	       else{
 	       	die("invalid param $param!");
 	       }
 	   }

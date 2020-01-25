@@ -11,6 +11,7 @@ if(in_array($origin, $allow_origin)){
 header('Content-Type:application/json; charset=utf-8');
 include_once("../config.php");
 
+
 $server_name=get_server_name(); 
 $username=get_user_name();
 $password=get_password();
@@ -26,10 +27,10 @@ if(!$link){
 }
   
 mysqli_query($link,"SET NAMES utf8");
-$q = "select user,ts,message from message order by ts desc limit 50";
+$q = "select id,title,read_count from blog order by read_count desc limit 8";
 $rs = mysqli_query($link,$q);
 while($row = mysqli_fetch_row($rs)){
-    $obj = array('user'=>(string)$row[0],'ts'=>(string)$row[1],'message'=>(string)$row[2]);
+    $obj = array('id'=>(string)$row[0],'title'=>(string)$row[1],'read_count'=>(string)$row[2]);
     array_push($result, $obj);
 }
 
